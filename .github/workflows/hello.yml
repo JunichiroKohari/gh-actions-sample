@@ -1,9 +1,13 @@
 name: Hello
-on:
-  schedule:
-    - cron: "1 * * * *"
+on: push
 jobs:
   run:
     runs-on: ubuntu-latest
     steps:
-      - run: date
+      - run: echo "${{ github.run_id }}"
+      - run: echo "${{ github.head_ref }}"
+      - run: echo "${{ github.workspace }}"
+      - run: echo "${{ github.repository }}"
+      - run: echo "${{ github.repository_owner }}"
+      - run: echo "${{ github.event }}"
+      - run: echo "${{ github.actor }}"

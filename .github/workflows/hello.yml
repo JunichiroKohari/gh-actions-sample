@@ -1,13 +1,14 @@
 name: Hello
 on: push
+env:
+  EXAMPLE: hoge
 jobs:
   run:
     runs-on: ubuntu-latest
+    env:
+      EXAMPLE: huga
     steps:
-      - run: echo "${{ github.run_id }}"
-      - run: echo "${{ github.head_ref }}"
-      - run: echo "${{ github.workspace }}"
-      - run: echo "${{ github.repository }}"
-      - run: echo "${{ github.repository_owner }}"
-      - run: echo "${{ github.event }}"
-      - run: echo "${{ github.actor }}"
+      - run: echo "${{ EXAMPLE }}"
+      - env:
+          EXAMPLE: piyo
+        run: echo "${{ EXAMPLE }}"

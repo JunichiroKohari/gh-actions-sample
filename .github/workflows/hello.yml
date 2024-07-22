@@ -1,14 +1,9 @@
 name: Hello
 on: push
-env:
-  EXAMPLE: hoge
 jobs:
   run:
     runs-on: ubuntu-latest
     env:
-      EXAMPLE: huga
+      ACTOR: ${{ github.actor }}
     steps:
-      - run: echo "${EXAMPLE}"
-      - env:
-          EXAMPLE: piyo
-        run: echo "${EXAMPLE}"
+      - run: echo "${ACTOR}"

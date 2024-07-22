@@ -8,7 +8,7 @@ jobs:
     env:
       EXAMPLE: huga
     steps:
-      - run: echo "${{ EXAMPLE }}"
+      - run: echo "${EXAMPLE}"
       - env:
           EXAMPLE: piyo
-        run: echo "${{ EXAMPLE }}"
+        run: echo "${EXAMPLE}"

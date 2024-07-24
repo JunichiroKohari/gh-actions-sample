@@ -3,9 +3,9 @@ on: push
 jobs:
   run:
     runs-on: ubuntu-latest
-    env:
-      HOGE: hoge
-      HUGA: ${{ 123 }}
     steps:
-      - run: echo "${{ github.event.*.html_url }}"
-      - run: echo "${HOGE} ${HUGA}"
+      - run: printenv | grep '_FUNC'
+        env:
+          CONTAINS_FUNC: ${{ contains('Hello', 'ell') }}
+          STARTS_WITH_FUNC: ${{ startsWith('Hello', 'Hel') }}
+          ENDS_WITH_FUNC: ${{ endsWith('Hello', 'lo') }}

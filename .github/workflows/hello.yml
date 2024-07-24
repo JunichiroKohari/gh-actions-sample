@@ -4,7 +4,9 @@ jobs:
   run:
     runs-on: ubuntu-latest
     env:
-      PASSWORD: ${{ secrets.PASSWORD }}
+      HOGE: hoge
+      HUGA: ${{ 123 }}
+      HTML_URL: ${{ github.event.*.html_url }}
     steps:
-      - run: echo "${PASSWORD}"
-      - run: echo "${PASSWORD:0:1} ${PASSWORD#?}"
+      - run: echo "${HTML_URL}"
+      - run: echo "${HOGE} ${HUGA}"

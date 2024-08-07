@@ -6,8 +6,8 @@ concurrency:
 jobs:
   log:
     runs-on: ubuntu-latest
+    env:
+      PASSWORD: himitu
     steps:
-      - run: |
-          echo "::group::Show environment variables"
-          printenv
-          echo "::endgroup::"
+      - run: echo "::add-mask::${PASSWORD}"
+      - run: echo "${PASSWORD}"

@@ -1,20 +1,19 @@
 name: Hello
-on: push
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+on:
+  workflow_dispatch:
+    inputs:
+      environment-name:
+        type: environment
+        default: test
+        required: false
+        description: Environment name
 jobs:
   print:
-    strategy:
-      matrix:                  # 多次元マトリックスの定義
-        include:               # 組み合わせ条件を手動で列挙
-          - os: ubuntu-latest  # パターン1
-            version: 20
-          - os: macos-latest   # パターン2
-            version: 18
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.environment-name }}
+    env:
+      USERNAME: ${{ vars.USERNAME }}
+      PASSWORD: ${{ secrets.PASSWORD }}
     steps:
-      - uses: actions/setup-node@v4
-        with:
-          node-version: ${{ matrix.version }}
-      - run: echo "${RUNNER_OS}" && node --version
+      - run: echo "${USERNAME}"
+      - run: echo "${PASSWORD:0:1} ${PASSWORD#?}"

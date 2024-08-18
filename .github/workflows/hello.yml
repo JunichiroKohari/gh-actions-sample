@@ -1,21 +1,14 @@
 name: Hello
 on: push
 jobs:
-  upload:
+  debug:
     runs-on: ubuntu-latest
     steps:
-      - run: date > date.txt               # アーティファクトの生成
-      - uses: actions/upload-artifact@v4   # アーティファクトのアップロード
+      - uses: actions/checkout@v4     # ローカルアクション呼び出し前にチェックアウト
+      - uses: ./.github/actions/dump/ # ローカルアクションの呼び出し
+        id: dump                      # 出力値参照のためステップIDを定義
         with:
-          name: uploaded                   # アーティファクト名
-          path: date.txt                   # アップロード対象のパス
-          retention-days: 7                # アーティファクトの保存期間
-  download:
-    runs-on: ubuntu-latest
-    needs: [upload]                        # uploadジョブの実行を待つ
-    steps:
-      - uses: actions/download-artifact@v4 # アーティファクトのダウンロード
-        with:
-          name: uploaded                   # アーティファクト名
-          path: downloaded                 # ダウンロード先のパス
-      - run: cat downloaded/date.txt       # アーティファクトを標準出力
+          enable-context: 'true'      # 入力パラメータの指定
+      - run: echo "${DATE}"
+        env:
+          DATE: ${{ steps.dump.outputs.dumped-date }} # アクションの出力値を参照

@@ -10,8 +10,8 @@ on:
 jobs:
   prepare:
     runs-on: ubuntu-latest
-    run: |
-      echo "ENVIRONMENT_NAME=dev" >> $GITHUB_ENV
+    steps:
+      - run: echo "ENVIRONMENT_NAME=dev" >> $GITHUB_ENV
   print:
     runs-on: ubuntu-latest
     environment: "${ENVIRONMENT_NAME}" # 利用するEnvironmentsを指定

@@ -7,20 +7,10 @@ on:
       - prd
     types:
       - closed
-  workflow_dispatch:
-    inputs:
-      deploy_target:
-        description: Environment to deploy
-        required: true
-        type: choice
-        options:
-          - dev
-          - stg
-          - prd
 jobs:
   print:
     runs-on: ubuntu-latest
-    environment: ${{ (github.event_name == 'pull_request' && github.ref_name) || inputs.deploy_target }}
+    environment: ${{ github.ref_name == 'main' && 'prd' || github.ref_name }}
     env:
       USERNAME: ${{ vars.USERNAME }}            # Environment variablesの参照
       PASSWORD: ${{ secrets.PASSWORD }}         # Environment secretsの参照

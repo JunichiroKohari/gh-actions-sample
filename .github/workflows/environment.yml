@@ -1,23 +1,31 @@
 name: Environments
 on:
+  pull_request:
+    branches:
+      - dev
+      - stg
+      - prd
+    types:
+      - closed
   workflow_dispatch:
     inputs:
-      environment-name:
-        type: environment             # 入力パラメータでEnvironmentsを切り替え
-        default: test
-        required: false
-        description: Environment name
+      deploy_target:
+        description: Environment to deploy
+        required: true
+        type: choice
+        options:
+          - dev
+          - stg
+          - prd
 jobs:
-  prepare:
-    runs-on: ubuntu-latest
-    steps:
-      - run: echo "ENVIRONMENT_NAME=dev" >> $GITHUB_ENV
   print:
     runs-on: ubuntu-latest
-    environment: "${ENVIRONMENT_NAME}" # 利用するEnvironmentsを指定
+    environment: ${{ (github.event_name == 'pull_request' && github.ref_name) || inputs.deploy_target }}
     env:
       USERNAME: ${{ vars.USERNAME }}            # Environment variablesの参照
       PASSWORD: ${{ secrets.PASSWORD }}         # Environment secretsの参照
     steps:
+      - run: echo "${{ github.event_name }}"
+      - run: echo "${{ github.ref_name }}"
       - run: echo "${ENVIRONMENT_NAME}"
       - run: echo "${PASSWORD:0:1} ${PASSWORD#?}"

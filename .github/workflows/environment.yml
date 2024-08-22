@@ -1,18 +1,19 @@
 name: Environments
-on:
-  pull_request:
-    branches:
-      - dev
-      - stg
-      - prd
-    types:
-      - closed
+on: push
+  # pull_request:
+  #   branches:
+  #     - dev
+  #     - stg
+  #     - prd
+  #   types:
+  #     - closed
 jobs:
   print:
     runs-on: ubuntu-latest
     permissions:
+      contents: read
       id-token: write                                  # OIDCトークンの取得を許可
-    environment: ${{ github.ref_name == 'main' && 'prd' || github.ref_name }}
+    environment: dev
     env: # AWSの認証アクションへ指定する入力パラメータを環境変数として定義
       ROLE_ARN: arn:aws:iam::${{ secrets.AWS_ID }}:role/${{ secrets.ROLE_NAME }}
       SESSION_NAME: gh-oidc-${{ github.run_id }}-${{ github.run_attempt }}

@@ -30,5 +30,8 @@ jobs:
           role-to-assume: ${{ env.ROLE_ARN }}
           role-session-name: ${{ env.SESSION_NAME }}
           aws-region: ap-northeast-1
+  listusers:
+    runs-on: ubuntu-latest
+    steps:
       - run: aws iam list-users                        # 一時クレデンシャルの利用
       - run: aws iam create-user --user-name invalid || true

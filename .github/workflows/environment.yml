@@ -18,11 +18,11 @@ jobs:
       ROLE_ARN: arn:aws:iam::${{ secrets.AWS_ID }}:role/${{ secrets.ROLE_NAME }}
       SESSION_NAME: gh-oidc-${{ github.run_id }}-${{ github.run_attempt }}
     steps:
-      - run: echo "${{ github.ref_name == 'main' && 'prd' || github.ref_name }}"
-      - run: echo "${{ github.event_name }}"
-      - run: echo "${{ github.head_ref }}"
-      - run: echo "${{ github.ref }}"
-      - run: echo "${{ github.ref_name }}"
+      - id: source
+        run: HOGE=$(echo "hello") >> "${GITHUB_OUTPUT}"
+      - env:
+          RESULT: ${{ steps.source.outputs.HOGE }}   # stepsコンテキストから参照
+        run: echo "${RESULT}"
       - run: echo "${{ github.ref_type }}"
       - run: echo "${ENVIRONMENT_NAME}"
       - run: echo "${PASSWORD:0:1} ${PASSWORD#?}"

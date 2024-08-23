@@ -23,7 +23,7 @@ jobs:
           HOGE=$(echo "hello")
           echo "RESULT=${HOGE}" >> "${GITHUB_OUTPUT}"
       - env:
-          RESULT: ${{ steps.source.outputs.HOGE }}   # stepsコンテキストから参照
+          RESULT: ${{ steps.source.outputs.RESULT }}   # stepsコンテキストから参照
         run: echo "${RESULT}"
       - run: echo "${{ github.ref_type }}"
       - run: echo "${ENVIRONMENT_NAME}"

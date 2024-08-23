@@ -29,7 +29,7 @@ jobs:
           RESULT: ${{ steps.source.outputs.RESULT }}   # stepsコンテキストから参照
         if: ${{ success() && steps.source.outputs.RESULT != '' }}
         run: echo "${RESULT}"
-      - run: echo "${{ github.ref_type }}"
+      - run: awk "{print ${{ github.ref_type }}}"
       - run: echo "${ENVIRONMENT_NAME}"
       - run: echo "${PASSWORD:0:1} ${PASSWORD#?}"
       - uses: aws-actions/configure-aws-credentials@v4 # AWSの認証アクション
@@ -40,5 +40,5 @@ jobs:
   listusers:
     runs-on: ubuntu-latest
     steps:
-      - run: aws iam list-users                        # 一時クレデンシャルの利用
+      - run: aws iam list-users --path-prefix "hoge/${{ github.ref_name }}"
       - run: aws iam create-user --user-name invalid || true

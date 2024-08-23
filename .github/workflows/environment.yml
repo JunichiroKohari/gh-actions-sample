@@ -22,9 +22,9 @@ jobs:
         run: |
           HOGE=$(echo "hello")
           echo "RESULT=${HOGE}" >> "${GITHUB_OUTPUT}"
-      - if: ${{ steps.source.outputs.RESULT != "" }}
+      - if: ${{ steps.source.outputs.RESULT != '' }}
         run: echo "${RESULT}"
-      - if: ${{ steps.source.outputs.RESULT == "" }}
+      - if: ${{ steps.source.outputs.RESULT == '' }}
         run: echo "empty!"
       - run: echo "${{ github.ref_type }}"
       - run: echo "${ENVIRONMENT_NAME}"

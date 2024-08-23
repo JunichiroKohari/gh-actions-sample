@@ -18,7 +18,8 @@ jobs:
       ROLE_ARN: arn:aws:iam::${{ secrets.AWS_ID }}:role/${{ secrets.ROLE_NAME }}
       SESSION_NAME: gh-oidc-${{ github.run_id }}-${{ github.run_attempt }}
     steps:
-      - id: source
+      - name: aaa
+        id: source
         run: |
           HOGE=$(echo "hey")
           echo "RESULT=${HOGE}" >> "${GITHUB_OUTPUT}"

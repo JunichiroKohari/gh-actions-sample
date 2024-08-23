@@ -19,7 +19,9 @@ jobs:
       SESSION_NAME: gh-oidc-${{ github.run_id }}-${{ github.run_attempt }}
     steps:
       - id: source
-        run: HOGE=$(echo "hello") >> "${GITHUB_OUTPUT}"
+        run: |
+          HOGE=$(echo "hello")
+          echo "RESULT=${HOGE}" >> "${GITHUB_OUTPUT}"
       - env:
           RESULT: ${{ steps.source.outputs.HOGE }}   # stepsコンテキストから参照
         run: echo "${RESULT}"

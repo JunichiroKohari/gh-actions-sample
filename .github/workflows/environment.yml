@@ -20,7 +20,7 @@ jobs:
     steps:
       - id: source
         run: |
-          HOGE=$(echo "")
+          HOGE=$(echo "hey")
           echo "RESULT=${HOGE}" >> "${GITHUB_OUTPUT}"
       - if: ${{ failure() || steps.source.outputs.RESULT == '' }}
         run: echo "::error::bye"

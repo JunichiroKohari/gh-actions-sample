@@ -23,8 +23,8 @@ jobs:
           HOGE=$(echo "hello")
           echo "RESULT=${HOGE}" >> "${GITHUB_OUTPUT}"
       - run: exit 1
-      - if: ${{ failure() }}
-        run: echo "bye"
+      - if: ${{ failure() || steps.source.outputs.RESULT == '' }}
+        run: echo "::error::bye"
       - env:
           RESULT: ${{ steps.source.outputs.RESULT }}   # stepsコンテキストから参照
         if: ${{ success() && steps.source.outputs.RESULT != '' }}

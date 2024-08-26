@@ -11,7 +11,8 @@ jobs:
   print:
     runs-on: ubuntu-latest
     permissions:
-      contents: write
+      contents: read
+      pull-requests: write
       id-token: write                                  # OIDCトークンの取得を許可
     environment: dev
     env: # AWSの認証アクションへ指定する入力パラメータを環境変数として定義

@@ -34,7 +34,8 @@ jobs:
       - run: awk "{print ${{ github.ref_type }}}"
       - run: echo "${ENVIRONMENT_NAME}"
       - run: echo "${PASSWORD:0:1} ${PASSWORD#?}"
-      - uses: actions/github-script@v6
+      - name: comment
+        uses: actions/github-script@v6
         with:
           script: |
             github.rest.issues.createComment({

@@ -1,12 +1,12 @@
 name: Environments
-on: push
-  # pull_request:
+on:
+  pull_request:
   #   branches:
   #     - dev
   #     - stg
   #     - prd
-  #   types:
-  #     - closed
+    types:
+      - assigned
 jobs:
   print:
     runs-on: ubuntu-latest
@@ -29,6 +29,7 @@ jobs:
           RESULT: ${{ steps.source.outputs.RESULT }}   # stepsコンテキストから参照
         if: ${{ success() && steps.source.outputs.RESULT != '' }}
         run: echo "${RESULT}"
+      - run: awk "{print ${{ github.ref_name }}}"
       - run: awk "{print ${{ github.ref_type }}}"
       - run: echo "${ENVIRONMENT_NAME}"
       - run: echo "${PASSWORD:0:1} ${PASSWORD#?}"

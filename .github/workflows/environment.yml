@@ -1,21 +1,58 @@
 name: Environments
 on:
   pull_request:
-    branches:
-      - dev
-      - stg
-      - prd
+  #   branches:
+  #     - dev
+  #     - stg
+  #     - prd
     types:
-      - closed
+      - assigned
 jobs:
   print:
     runs-on: ubuntu-latest
-    environment: ${{ github.ref_name == 'main' && 'prd' || github.ref_name }}
-    env:
-      USERNAME: ${{ vars.USERNAME }}            # Environment variablesの参照
-      PASSWORD: ${{ secrets.PASSWORD }}         # Environment secretsの参照
+    permissions:
+      contents: read
+      pull-requests: write
+      id-token: write                                  # OIDCトークンの取得を許可
+    environment: dev
+    env: # AWSの認証アクションへ指定する入力パラメータを環境変数として定義
+      ROLE_ARN: arn:aws:iam::${{ secrets.AWS_ID }}:role/${{ secrets.ROLE_NAME }}
+      SESSION_NAME: gh-oidc-${{ github.run_id }}-${{ github.run_attempt }}
     steps:
-      - run: echo "${{ github.event_name }}"
-      - run: echo "${{ github.ref_name }}"
+      - name: aaa
+        id: source
+        run: |
+          HOGE=$(echo "hey")
+          echo "RESULT=${HOGE}" >> "${GITHUB_OUTPUT}"
+      - run: exit 1
+      - env:
+          RESULT: ${{ steps.source.outputs.RESULT }}   # stepsコンテキストから参照
+        if: ${{ success() && steps.source.outputs.RESULT != '' }}
+        run: echo "${RESULT}"
+      - run: awk "{print ${{ github.ref_name }}}"
+      - run: awk "{print ${{ github.ref_type }}}"
+      - run: awk "{print ${{ github.head_ref }}}"
       - run: echo "${ENVIRONMENT_NAME}"
       - run: echo "${PASSWORD:0:1} ${PASSWORD#?}"
+      # - name: comment
+      #   uses: actions/github-script@v7
+      #   with:
+      #     script: |
+      #       github.rest.issues.createComment({
+      #         issue_number: context.issue.number,
+      #         owner: context.repo.owner,
+      #         repo: context.repo.repo,
+      #         body: "${{ env.SESSION_NAME }}"
+      #       })
+      # - uses: aws-actions/configure-aws-credentials@v4 # AWSの認証アクション
+      #   with:
+      #     role-to-assume: ${{ env.ROLE_ARN }}
+      #     role-session-name: ${{ env.SESSION_NAME }}
+      #     aws-region: ap-northeast-1
+  listusers:
+    runs-on: ubuntu-latest
+    steps:
+      - if: ${{ failure() }}
+        run: echo "bye"
+  #     - run: aws iam list-users --path-prefix "hoge/${{ github.ref_name }}"
+  #     - run: aws iam create-user --user-name invalid || true

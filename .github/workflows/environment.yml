@@ -24,8 +24,7 @@ jobs:
         run: |
           HOGE=$(echo "hey")
           echo "RESULT=${HOGE}" >> "${GITHUB_OUTPUT}"
-      - if: ${{ failure() || steps.source.outputs.RESULT == '' }}
-        run: echo "::error::bye"
+      - run: exit 1
       - env:
           RESULT: ${{ steps.source.outputs.RESULT }}   # stepsコンテキストから参照
         if: ${{ success() && steps.source.outputs.RESULT != '' }}
@@ -50,8 +49,10 @@ jobs:
       #     role-to-assume: ${{ env.ROLE_ARN }}
       #     role-session-name: ${{ env.SESSION_NAME }}
       #     aws-region: ap-northeast-1
-  # listusers:
-  #   runs-on: ubuntu-latest
-  #   steps:
+  listusers:
+    runs-on: ubuntu-latest
+    steps:
+      - if: ${{ failure() }}
+        run: echo "bye"
   #     - run: aws iam list-users --path-prefix "hoge/${{ github.ref_name }}"
   #     - run: aws iam create-user --user-name invalid || true
